@@ -175,4 +175,26 @@ const viewAll = async function(req, res, next)
 }
 
 
-module.exports = { create, update, markSold, deleteProperty, viewAll }
+
+const getPropertiesOfType = async function(req, res, next) 
+                        {
+                            try
+                            {
+                                
+                                const propertiesOfTypeResult = await Property.getPropertiesOfType(req.query.propertyType) 
+
+                                if( !propertiesOfTypeResult )
+                                {
+                                    return sendServerErrorResponse(" Server Encountered error while fetching propeties of specific type",res)
+                                }
+
+                                return res.status(200).json({"status":"success", data: propertiesOfTypeResult.res  })
+
+                            }
+                            catch(err)
+                            {
+                                return res.status(500).json({"status":"error", "error": err.message })
+                            }
+                        }
+
+module.exports = { create, update, markSold, deleteProperty, viewAll, getPropertiesOfType }

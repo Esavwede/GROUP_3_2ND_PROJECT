@@ -13,8 +13,8 @@ module.exports = (app) =>
     router.patch('/:property_id/sold', property.markSold )
     router.delete('/:property_id',property.deleteProperty)
     router.get('/',property.viewAll) 
+    router.get('/search', property.getPropertiesOfType )
 
-    
     app.use('/api/v1/property',router)
 }
 

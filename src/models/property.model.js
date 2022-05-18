@@ -189,6 +189,34 @@ class Property
             })
         })
     }
+
+
+    static async getPropertiesOfType(propertyType)
+    {
+        return new Promise(async (resolve, reject)=>{
+
+            console.log(" Property Type: Hey ogaga ")
+            console.log( propertyType )
+
+           await  db.query(` SELECT id, status, type, state, city, address, price,
+             created_on, imageUrls FROM properties WHERE status = ? and type = ? `,
+            ['available',propertyType],
+            (err, res)=>{
+
+                
+                if( err )
+                {
+                  
+                    console.log(err)
+                    return reject( new Error(" Server Encountered error while getting properties of specific type "))
+                }
+        
+                console.log(res) 
+                resolve({status: 200, res })
+            })
+        })
+    }
+
     // ENd 
 
 }

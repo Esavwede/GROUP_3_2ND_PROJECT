@@ -62,5 +62,51 @@ const create = async function(req, res, next)
                 }
 
 
+                
+const login = async function(req, res, next)
+{
 
-module.exports = { create }
+
+    try 
+    {
+       
+    if( !req.body )
+    {
+        return res.status(400).json({"status":"error", "error":" request body cannot be empty"})
+    }
+
+    var { email, password } = req.body 
+    email = email.trim() 
+    password = password.trim() 
+
+    const loginData = { email, password }
+    const userCanLogin = await User.login(loginData)
+
+
+        if( !userCanLogin ) 
+        {
+            sendServerErrorResponse("server encountered an error while logging user in ",res) 
+        }
+
+        if( userCanLogin.status === 400 )
+        {
+            return res.status(400).json({"status":"error", "error": userCanLogin.msg })
+        }
+
+        
+                 return res.status(200).json({"status":"success", data: userCanLogin.res })
+
+
+    }catch(err)
+    {
+        return res.status(500).json({"status":"error", "error": err.message })
+    }
+    
+        // No try catch 
+
+}
+
+
+
+
+module.exports = { create, login  }

@@ -87,6 +87,48 @@ class User
             }
 
 
+
+    static login(userData)
+    {
+        
+        return new Promise(async(resolve, reject)=>
+        {
+
+            var { email, password } = userData 
+            
+            const query = ` SELECT id, first_name, last_name, email, password FROM users WHERE email = ?`
+            const queryValues = [ email]
+
+           await db.query(query,queryValues, (err, res) => {
+
+                if (err) {
+                    console.log(err) 
+                    return reject(new Error("Server encountered error during login"))
+                }
+
+                console.dir(res) 
+                
+                if (!res.length) {
+                    return resolve({ "status": 400, "msg": " user with email not found " })
+                }
+
+                const hashedPassword = res[0].password 
+       
+                // check password 
+                if( comparePassword( password, hashedPassword ) )
+                {
+                    const token = generateToken( res[0].id )
+                    return resolve({ "status": 200, res: { token, ...res[0] } })
+                }
+             
+                    return reject({"status": 400, res:" incorrect password "})
+            })
+
+        }) 
+
+    }
+
+
 }
 
 

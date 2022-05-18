@@ -104,4 +104,30 @@ const update = async function(req, res, next)
 
 
 
-module.exports = { create, update }
+const markSold = async function(req, res, next)
+                        {
+
+                            try
+                            {
+
+                                const property_id = req.params.property_id 
+                                const markSoldResult = await Property.markSold(property_id) 
+
+                                if( !markSoldResult ) 
+                                {
+                                    return sendServerErrorResponse("Server encountered error while marking property as sold ",res)
+                                }
+
+                                return res.status(200).json({"status":"success", data: markSoldResult.res  })
+
+                            }
+                            catch(err)
+                            {
+                                return res.status(500).json({"status":"error", "error": err.message })
+                            }
+
+                        }
+
+
+
+module.exports = { create, update, markSold }

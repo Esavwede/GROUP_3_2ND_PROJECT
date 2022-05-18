@@ -93,6 +93,45 @@ class Property
         })        
     }
 
+
+    static async markSold(propertyId)
+    {
+        return new Promise(async (resolve, reject)=>{ 
+
+            await db.query(` UPDATE properties SET status = ? where id = ? `,
+            ['sold',propertyId],
+            async (err)=>{
+
+
+                if( err )
+                {
+                    console.log(err) 
+                    return reject(new Error(" Error occured while marking property as sold "))
+                }
+
+
+                await db.query(` SELECT id, status, type, state, city, address, price, 
+                created_on, imageUrls  FROM properties WHERE id = ? `,
+                [propertyId],
+                (err, res)=>{
+
+                    if(err) 
+                    {
+                        console.log(err) 
+                       return reject( new Error(" Error occured while marking property as sold "))
+                    }
+
+                    console.log(` Property marked as sold`)
+                    console.log(res) 
+                    const data = {}
+                   return resolve({ updated: true, status: 200, res:{ ...res[0] } })
+                })
+            }
+            )
+
+        })
+    }
+
     // ENd 
 
 }

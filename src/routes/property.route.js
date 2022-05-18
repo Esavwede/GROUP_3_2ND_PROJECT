@@ -9,7 +9,9 @@ module.exports = (app) =>
 {
 
     router.post('/', upload.array('image'), property.create )
+    router.patch('/:_id', property.update )
 
+    
     app.use('/api/v1/property',router)
 }
 

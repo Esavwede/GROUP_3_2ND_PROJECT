@@ -72,6 +72,36 @@ const create = async function(req, res, next)
                     
                 }
 
+                
+const update = async function(req, res, next)
+{
+    try
+    {
 
 
-module.exports = { create }
+        if( !req.body )
+        {
+            return res.status(400).json({"status":"error", "error":"cannot update with an empty body "})
+        }
+
+        const property_id = req.params._id  
+        const propertyUpdated = await Property.update(req.body,property_id)
+
+        
+        if( !propertyUpdated )
+        {
+            return sendServerErrorResponse(" server encountered error while updating property ",res)
+        }
+    
+            return res.status(200).json({"status":"success", data: propertyUpdated.res  })
+        
+
+
+    }catch(err){
+        return res.status(500).json({"status":"error", "error": err.message })
+    }
+}
+
+
+
+module.exports = { create, update }

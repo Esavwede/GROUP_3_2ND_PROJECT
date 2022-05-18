@@ -217,6 +217,28 @@ class Property
         })
     }
 
+
+    static viewProperty(property_id)
+    {
+        return new Promise(async (resolve, reject)=>{
+
+            const query = ` SELECT id, status, type, state, city, address, price, created_on, imageUrls FROM properties WHERE id = ? `
+            const values = [property_id] 
+
+            await db.query(query,values,(err, res)=>{
+                
+                if( err )
+                {
+                   return  reject(new Error("Server encountered error while getting property "))
+                }
+
+                    console.log(` Property : \n ${ res } `)
+                    const data = { success: true, status: 200, res: { ...res[0] } }
+                    resolve(data) 
+            })
+        })
+    }
+
     // ENd 
 
 }

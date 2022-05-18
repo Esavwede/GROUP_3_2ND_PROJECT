@@ -197,4 +197,25 @@ const getPropertiesOfType = async function(req, res, next)
                             }
                         }
 
-module.exports = { create, update, markSold, deleteProperty, viewAll, getPropertiesOfType }
+                        const viewProperty = async function(req, res, next)
+                        {
+                            try 
+                            {
+                                const property_id = req.params.property_id 
+                                const propertyResult = await Property.viewProperty(property_id) 
+
+
+                                if( !propertyResult )
+                                {
+                                    return sendServerErrorResponse("Server encountered error while fetching property ",res)
+                                }
+
+                                    return res.status(propertyResult.status).json({ "status":"success", "data": propertyResult.res })
+                            }
+                            catch(err)
+                            {
+                                return res.status(500).json({"status":"error", "error": err.message })
+                            }
+                        }
+
+module.exports = { create, update, markSold, deleteProperty, viewAll, getPropertiesOfType, viewProperty }

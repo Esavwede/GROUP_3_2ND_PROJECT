@@ -14,6 +14,7 @@ module.exports = (app) =>
     router.delete('/:property_id',property.deleteProperty)
     router.get('/',property.viewAll) 
     router.get('/search', property.getPropertiesOfType )
+    router.get('/:property_id', property.viewProperty ) 
 
     app.use('/api/v1/property',router)
 }

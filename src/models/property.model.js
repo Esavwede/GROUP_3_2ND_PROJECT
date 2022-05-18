@@ -133,8 +133,62 @@ class Property
     }
 
 
+    static async delete(property_id)
+    {
+        return new Promise(async (resolve, reject)=>{
 
+            db.query(` SELECT id, status, type, state, city, address, price, created_on, imageUrls FROM properties WHERE id = ?`,
+                    [property_id],
+                    async (err, res)=>{
+
+                        if( err )
+                        {
+                            console.log(err) 
+                            return reject(new Error(" Error occured while deleting property"))
+                        }
+
+                        const deletedProperty = res[0] 
+
+                        db.query(` DELETE FROM properties WHERE id = ? `,
+                        [property_id],
+                        async (err, res)=>{
+            
+                            if( err )
+                            {
+                                return reject(new Error("Error occured while deleting property"))
+                            }
+            
+                            console.log(` Property deleted`)
+                            console.log(res)
+                            resolve({ deleted: true, status: 200, res: deletedProperty })
+                        })
+
+
+                    })
+         
+        })
+    }
     
+
+    static async viewAll()
+    {
+        return new Promise((resolve, reject)=>{
+
+            db.query(` SELECT * FROM properties WHERE status = ? `,
+            ['available'],
+            (err, res)=>{
+
+                if( err )
+                {
+                    return reject( new Error(("Server encountered error while getting a properties ")) ) 
+                }
+
+             
+                console.log(res) 
+                resolve({status: 200, res })
+            })
+        })
+    }
     // ENd 
 
 }

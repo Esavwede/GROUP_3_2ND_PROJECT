@@ -16,7 +16,7 @@ app.get('/',(req, res, next)=>{
 
 // API ENDPOINTS 
 require('./src/routes/user.route')(app)// User 
-
+require('./src/routes/property.route')(app)// Property 
 
 const PORT = 3000
 

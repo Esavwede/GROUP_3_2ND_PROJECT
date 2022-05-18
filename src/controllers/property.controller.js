@@ -130,4 +130,27 @@ const markSold = async function(req, res, next)
 
 
 
-module.exports = { create, update, markSold }
+                        const deleteProperty = async function(req, res, next)
+                        {
+                            try
+                            {
+                                const property_id = req.params.property_id 
+                                const deleteResult = await Property.delete(property_id) 
+
+                                if( !deleteResult ) 
+                                {
+                                    return sendServerErrorResponse("Server encountered error while deleting property ",res)
+                                }
+
+                                return res.status(200).json({"status":"success", data: deleteResult.res  })
+
+                            }
+                            catch(err)
+                            {
+                                return res.status(500).json({"status":"error", "error": err.message })
+                            }
+                        }
+
+
+
+module.exports = { create, update, markSold, deleteProperty }
